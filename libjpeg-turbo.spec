@@ -4,7 +4,7 @@
 #
 Name     : libjpeg-turbo
 Version  : 1.4.2
-Release  : 11
+Release  : 12
 URL      : http://downloads.sourceforge.net/libjpeg-turbo/libjpeg-turbo-1.4.2.tar.gz
 Source0  : http://downloads.sourceforge.net/libjpeg-turbo/libjpeg-turbo-1.4.2.tar.gz
 Summary  : No detailed summary available
