@@ -4,7 +4,7 @@
 #
 Name     : libjpeg-turbo
 Version  : 1.4.90
-Release  : 14
+Release  : 15
 URL      : http://downloads.sourceforge.net/libjpeg-turbo/libjpeg-turbo-1.4.90.tar.gz
 Source0  : http://downloads.sourceforge.net/libjpeg-turbo/libjpeg-turbo-1.4.90.tar.gz
 Summary  : A SIMD-accelerated JPEG codec that provides the libjpeg API
