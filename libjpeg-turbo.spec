@@ -4,7 +4,7 @@
 #
 Name     : libjpeg-turbo
 Version  : 1.5.1
-Release  : 19
+Release  : 20
 URL      : http://downloads.sourceforge.net/libjpeg-turbo/libjpeg-turbo-1.5.1.tar.gz
 Source0  : http://downloads.sourceforge.net/libjpeg-turbo/libjpeg-turbo-1.5.1.tar.gz
 Summary  : A SIMD-accelerated JPEG codec that provides the TurboJPEG API
@@ -71,10 +71,10 @@ export LANG=C
 export AR=gcc-ar
 export RANLIB=gcc-ranlib
 export NM=gcc-nm
-export CFLAGS="$CFLAGS -fno-semantic-interposition -falign-functions=32 -O3 "
-export FCFLAGS="$CFLAGS -fno-semantic-interposition -falign-functions=32 -O3 "
-export FFLAGS="$CFLAGS -fno-semantic-interposition -falign-functions=32 -O3 "
-export CXXFLAGS="$CXXFLAGS -fno-semantic-interposition -falign-functions=32 -O3 "
+export CFLAGS="$CFLAGS -falign-functions=32 -fno-semantic-interposition -O3 "
+export FCFLAGS="$CFLAGS -falign-functions=32 -fno-semantic-interposition -O3 "
+export FFLAGS="$CFLAGS -falign-functions=32 -fno-semantic-interposition -O3 "
+export CXXFLAGS="$CXXFLAGS -falign-functions=32 -fno-semantic-interposition -O3 "
 %configure --disable-static
 make V=1  %{?_smp_mflags}
 
