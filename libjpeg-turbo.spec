@@ -4,7 +4,7 @@
 #
 Name     : libjpeg-turbo
 Version  : 1.5.1
-Release  : 20
+Release  : 21
 URL      : http://downloads.sourceforge.net/libjpeg-turbo/libjpeg-turbo-1.5.1.tar.gz
 Source0  : http://downloads.sourceforge.net/libjpeg-turbo/libjpeg-turbo-1.5.1.tar.gz
 Summary  : A SIMD-accelerated JPEG codec that provides the TurboJPEG API
@@ -68,13 +68,10 @@ lib components for the libjpeg-turbo package.
 
 %build
 export LANG=C
-export AR=gcc-ar
-export RANLIB=gcc-ranlib
-export NM=gcc-nm
-export CFLAGS="$CFLAGS -falign-functions=32 -fno-semantic-interposition -O3 "
-export FCFLAGS="$CFLAGS -falign-functions=32 -fno-semantic-interposition -O3 "
-export FFLAGS="$CFLAGS -falign-functions=32 -fno-semantic-interposition -O3 "
-export CXXFLAGS="$CXXFLAGS -falign-functions=32 -fno-semantic-interposition -O3 "
+export CFLAGS="$CFLAGS -O3 -falign-functions=32 -fno-semantic-interposition "
+export FCFLAGS="$CFLAGS -O3 -falign-functions=32 -fno-semantic-interposition "
+export FFLAGS="$CFLAGS -O3 -falign-functions=32 -fno-semantic-interposition "
+export CXXFLAGS="$CXXFLAGS -O3 -falign-functions=32 -fno-semantic-interposition "
 %configure --disable-static
 make V=1  %{?_smp_mflags}
 
@@ -104,14 +101,19 @@ rm -rf %{buildroot}
 %files dev
 %defattr(-,root,root,-)
 /usr/include/*.h
-/usr/lib64/*.so
-/usr/lib64/pkgconfig/*.pc
+/usr/lib64/libjpeg.so
+/usr/lib64/libturbojpeg.so
+/usr/lib64/pkgconfig/libjpeg.pc
+/usr/lib64/pkgconfig/libturbojpeg.pc
 
 %files doc
 %defattr(-,root,root,-)
-%doc /usr/share/doc/libjpeg-turbo/*
+%doc /usr/share/doc/libjpeg\-turbo/*
 %doc /usr/share/man/man1/*
 
 %files lib
 %defattr(-,root,root,-)
-/usr/lib64/*.so.*
+/usr/lib64/libjpeg.so.62
+/usr/lib64/libjpeg.so.62.2.0
+/usr/lib64/libturbojpeg.so.0
+/usr/lib64/libturbojpeg.so.0.1.0
