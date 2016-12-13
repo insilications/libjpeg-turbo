@@ -4,7 +4,7 @@
 #
 Name     : libjpeg-turbo
 Version  : 1.5.1
-Release  : 21
+Release  : 22
 URL      : http://downloads.sourceforge.net/libjpeg-turbo/libjpeg-turbo-1.5.1.tar.gz
 Source0  : http://downloads.sourceforge.net/libjpeg-turbo/libjpeg-turbo-1.5.1.tar.gz
 Summary  : A SIMD-accelerated JPEG codec that provides the TurboJPEG API
@@ -14,6 +14,11 @@ Requires: libjpeg-turbo-bin
 Requires: libjpeg-turbo-lib
 Requires: libjpeg-turbo-doc
 BuildRequires : cmake
+BuildRequires : gcc-dev32
+BuildRequires : gcc-libgcc32
+BuildRequires : gcc-libstdc++32
+BuildRequires : glibc-dev32
+BuildRequires : glibc-libc32
 BuildRequires : nasm-bin
 
 %description
@@ -47,6 +52,16 @@ Provides: libjpeg-turbo-devel
 dev components for the libjpeg-turbo package.
 
 
+%package dev32
+Summary: dev32 components for the libjpeg-turbo package.
+Group: Default
+Requires: libjpeg-turbo-lib32
+Requires: libjpeg-turbo-bin
+
+%description dev32
+dev32 components for the libjpeg-turbo package.
+
+
 %package doc
 Summary: doc components for the libjpeg-turbo package.
 Group: Documentation
@@ -63,18 +78,39 @@ Group: Libraries
 lib components for the libjpeg-turbo package.
 
 
+%package lib32
+Summary: lib32 components for the libjpeg-turbo package.
+Group: Default
+
+%description lib32
+lib32 components for the libjpeg-turbo package.
+
+
 %prep
 %setup -q -n libjpeg-turbo-1.5.1
+pushd ..
+cp -a libjpeg-turbo-1.5.1 build32
+popd
 
 %build
 export LANG=C
-export CFLAGS="$CFLAGS -O3 -falign-functions=32 -fno-semantic-interposition "
-export FCFLAGS="$CFLAGS -O3 -falign-functions=32 -fno-semantic-interposition "
-export FFLAGS="$CFLAGS -O3 -falign-functions=32 -fno-semantic-interposition "
-export CXXFLAGS="$CXXFLAGS -O3 -falign-functions=32 -fno-semantic-interposition "
+export AR=gcc-ar
+export RANLIB=gcc-ranlib
+export NM=gcc-nm
+export CFLAGS="$CFLAGS -O3 -falign-functions=32 -flto -fno-semantic-interposition "
+export FCFLAGS="$CFLAGS -O3 -falign-functions=32 -flto -fno-semantic-interposition "
+export FFLAGS="$CFLAGS -O3 -falign-functions=32 -flto -fno-semantic-interposition "
+export CXXFLAGS="$CXXFLAGS -O3 -falign-functions=32 -flto -fno-semantic-interposition "
 %configure --disable-static
 make V=1  %{?_smp_mflags}
 
+pushd ../build32/
+export CFLAGS="$CFLAGS -m32 -I/usr/lib32/glib-2.0/include"
+export CXXFLAGS="$CXXFLAGS -m32 -I/usr/lib32/glib-2.0/include"
+export LDFLAGS="$LDFLAGS -m32 -I/usr/lib32/glib-2.0/include"
+%configure --disable-static   --libdir=/usr/lib32 --build=i686-generic-linux-gnu --host=i686-generic-linux-gnu --target=i686-clr-linux-gnu
+make V=1  %{?_smp_mflags}
+popd
 %check
 export LANG=C
 export http_proxy=http://127.0.0.1:9/
@@ -84,6 +120,15 @@ make VERBOSE=1 V=1 %{?_smp_mflags} check
 
 %install
 rm -rf %{buildroot}
+pushd ../build32/
+%make_install32
+if [ -d  %{buildroot}/usr/lib32/pkgconfig ]
+then
+pushd %{buildroot}/usr/lib32/pkgconfig
+for i in *.pc ; do mv $i 32$i ; done
+popd
+fi
+popd
 %make_install
 
 %files
@@ -106,6 +151,13 @@ rm -rf %{buildroot}
 /usr/lib64/pkgconfig/libjpeg.pc
 /usr/lib64/pkgconfig/libturbojpeg.pc
 
+%files dev32
+%defattr(-,root,root,-)
+/usr/lib32/libjpeg.so
+/usr/lib32/libturbojpeg.so
+/usr/lib32/pkgconfig/32libjpeg.pc
+/usr/lib32/pkgconfig/32libturbojpeg.pc
+
 %files doc
 %defattr(-,root,root,-)
 %doc /usr/share/doc/libjpeg\-turbo/*
@@ -117,3 +169,10 @@ rm -rf %{buildroot}
 /usr/lib64/libjpeg.so.62.2.0
 /usr/lib64/libturbojpeg.so.0
 /usr/lib64/libturbojpeg.so.0.1.0
+
+%files lib32
+%defattr(-,root,root,-)
+/usr/lib32/libjpeg.so.62
+/usr/lib32/libjpeg.so.62.2.0
+/usr/lib32/libturbojpeg.so.0
+/usr/lib32/libturbojpeg.so.0.1.0
