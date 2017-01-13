@@ -6,7 +6,7 @@
 #
 Name     : libjpeg-turbo
 Version  : 1.5.1
-Release  : 26
+Release  : 27
 URL      : http://downloads.sourceforge.net/libjpeg-turbo/libjpeg-turbo-1.5.1.tar.gz
 Source0  : http://downloads.sourceforge.net/libjpeg-turbo/libjpeg-turbo-1.5.1.tar.gz
 Source99 : http://downloads.sourceforge.net/libjpeg-turbo/libjpeg-turbo-1.5.1.tar.gz.sig
@@ -22,7 +22,9 @@ BuildRequires : gcc-libgcc32
 BuildRequires : gcc-libstdc++32
 BuildRequires : glibc-dev32
 BuildRequires : glibc-libc32
-BuildRequires : nasm-bin
+BuildRequires : nasm
+BuildRequires : yasm
+Patch1: fmv.patch
 
 %description
 TurboJPEG Java Wrapper
@@ -92,20 +94,18 @@ lib32 components for the libjpeg-turbo package.
 
 %prep
 %setup -q -n libjpeg-turbo-1.5.1
+%patch1 -p1
 pushd ..
 cp -a libjpeg-turbo-1.5.1 build32
 popd
 
 %build
 export LANG=C
-export SOURCE_DATE_EPOCH=1484334053
-export AR=gcc-ar
-export RANLIB=gcc-ranlib
-export NM=gcc-nm
-export CFLAGS="$CFLAGS -O3 -falign-functions=32 -ffat-lto-objects -flto -fno-semantic-interposition "
-export FCFLAGS="$CFLAGS -O3 -falign-functions=32 -ffat-lto-objects -flto -fno-semantic-interposition "
-export FFLAGS="$CFLAGS -O3 -falign-functions=32 -ffat-lto-objects -flto -fno-semantic-interposition "
-export CXXFLAGS="$CXXFLAGS -O3 -falign-functions=32 -ffat-lto-objects -flto -fno-semantic-interposition "
+export SOURCE_DATE_EPOCH=1484338301
+export CFLAGS="$CFLAGS -O3 -falign-functions=32 -fno-semantic-interposition "
+export FCFLAGS="$CFLAGS -O3 -falign-functions=32 -fno-semantic-interposition "
+export FFLAGS="$CFLAGS -O3 -falign-functions=32 -fno-semantic-interposition "
+export CXXFLAGS="$CXXFLAGS -O3 -falign-functions=32 -fno-semantic-interposition "
 export CFLAGS_GENERATE="$CFLAGS -fprofile-generate -fprofile-dir=pgo "
 export FCFLAGS_GENERATE="$FCFLAGS -fprofile-generate -fprofile-dir=pgo "
 export FFLAGS_GENERATE="$FFLAGS -fprofile-generate -fprofile-dir=pgo "

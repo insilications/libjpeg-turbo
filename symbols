@@ -1,5 +1,7 @@
 libjpeg.so.62:LIBJPEGTURBO_6.2
 libjpeg.so.62:LIBJPEG_6.2
+libjpeg.so.62:decode_mcu_fast._GLOBAL___jdhuff.c_BA21B85A_0x147ff4ce8441bf.resolver
+libjpeg.so.62:decode_mcu_slow._GLOBAL___jdhuff.c_BA21B85A_0x147ff4ce8441bf.resolver
 libjpeg.so.62:jcopy_block_row
 libjpeg.so.62:jcopy_sample_rows
 libjpeg.so.62:jdiv_round_up
