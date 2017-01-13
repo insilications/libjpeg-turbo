@@ -6,7 +6,7 @@
 #
 Name     : libjpeg-turbo
 Version  : 1.5.1
-Release  : 27
+Release  : 28
 URL      : http://downloads.sourceforge.net/libjpeg-turbo/libjpeg-turbo-1.5.1.tar.gz
 Source0  : http://downloads.sourceforge.net/libjpeg-turbo/libjpeg-turbo-1.5.1.tar.gz
 Source99 : http://downloads.sourceforge.net/libjpeg-turbo/libjpeg-turbo-1.5.1.tar.gz.sig
@@ -24,7 +24,6 @@ BuildRequires : glibc-dev32
 BuildRequires : glibc-libc32
 BuildRequires : nasm
 BuildRequires : yasm
-Patch1: fmv.patch
 
 %description
 TurboJPEG Java Wrapper
@@ -94,18 +93,20 @@ lib32 components for the libjpeg-turbo package.
 
 %prep
 %setup -q -n libjpeg-turbo-1.5.1
-%patch1 -p1
 pushd ..
 cp -a libjpeg-turbo-1.5.1 build32
 popd
 
 %build
 export LANG=C
-export SOURCE_DATE_EPOCH=1484338301
-export CFLAGS="$CFLAGS -O3 -falign-functions=32 -fno-semantic-interposition "
-export FCFLAGS="$CFLAGS -O3 -falign-functions=32 -fno-semantic-interposition "
-export FFLAGS="$CFLAGS -O3 -falign-functions=32 -fno-semantic-interposition "
-export CXXFLAGS="$CXXFLAGS -O3 -falign-functions=32 -fno-semantic-interposition "
+export SOURCE_DATE_EPOCH=1484339307
+export AR=gcc-ar
+export RANLIB=gcc-ranlib
+export NM=gcc-nm
+export CFLAGS="$CFLAGS -O3 -falign-functions=32 -ffat-lto-objects -flto -fno-semantic-interposition "
+export FCFLAGS="$CFLAGS -O3 -falign-functions=32 -ffat-lto-objects -flto -fno-semantic-interposition "
+export FFLAGS="$CFLAGS -O3 -falign-functions=32 -ffat-lto-objects -flto -fno-semantic-interposition "
+export CXXFLAGS="$CXXFLAGS -O3 -falign-functions=32 -ffat-lto-objects -flto -fno-semantic-interposition "
 export CFLAGS_GENERATE="$CFLAGS -fprofile-generate -fprofile-dir=pgo "
 export FCFLAGS_GENERATE="$FCFLAGS -fprofile-generate -fprofile-dir=pgo "
 export FFLAGS_GENERATE="$FFLAGS -fprofile-generate -fprofile-dir=pgo "
@@ -149,6 +150,27 @@ popd
 fi
 popd
 %make_install
+export AR=gcc-ar
+export RANLIB=gcc-ranlib
+export NM=gcc-nm
+export CFLAGS="$CFLAGS -O3 -falign-functions=32 -ffat-lto-objects -flto -fno-semantic-interposition -mavx2 "
+export FCFLAGS="$CFLAGS -O3 -falign-functions=32 -ffat-lto-objects -flto -fno-semantic-interposition -mavx2 "
+export FFLAGS="$CFLAGS -O3 -falign-functions=32 -ffat-lto-objects -flto -fno-semantic-interposition -mavx2 "
+export CXXFLAGS="$CXXFLAGS -O3 -falign-functions=32 -ffat-lto-objects -flto -fno-semantic-interposition -mavx2 "
+export CFLAGS_GENERATE="$CFLAGS -fprofile-generate -fprofile-dir=pgo "
+export FCFLAGS_GENERATE="$FCFLAGS -fprofile-generate -fprofile-dir=pgo "
+export FFLAGS_GENERATE="$FFLAGS -fprofile-generate -fprofile-dir=pgo "
+export CXXFLAGS_GENERATE="$CXXFLAGS -fprofile-generate -fprofile-dir=pgo "
+export CFLAGS_USE="$CFLAGS -fprofile-use -fprofile-dir=pgo -fprofile-correction "
+export FCFLAGS_USE="$FCFLAGS -fprofile-use -fprofile-dir=pgo -fprofile-correction "
+export FFLAGS_USE="$FFLAGS -fprofile-use -fprofile-dir=pgo -fprofile-correction "
+export CXXFLAGS_USE="$CXXFLAGS -fprofile-use -fprofile-dir=pgo -fprofile-correction "
+make clean
+%configure --disable-static --libdir=/usr/lib64/avx2
+make V=1  %{?_smp_mflags}
+make DESTDIR=%{buildroot} install-libLTLIBRARIES
+rm -f %{buildroot}/usr/lib64/avx2/*.la
+rm -f %{buildroot}/usr/lib64/avx2/*.lo
 
 %files
 %defattr(-,root,root,-)
@@ -165,6 +187,8 @@ popd
 %files dev
 %defattr(-,root,root,-)
 /usr/include/*.h
+/usr/lib64/avx2/libjpeg.so
+/usr/lib64/avx2/libturbojpeg.so
 /usr/lib64/libjpeg.so
 /usr/lib64/libturbojpeg.so
 /usr/lib64/pkgconfig/libjpeg.pc
@@ -186,6 +210,10 @@ popd
 
 %files lib
 %defattr(-,root,root,-)
+/usr/lib64/avx2/libjpeg.so.62
+/usr/lib64/avx2/libjpeg.so.62.2.0
+/usr/lib64/avx2/libturbojpeg.so.0
+/usr/lib64/avx2/libturbojpeg.so.0.1.0
 /usr/lib64/libjpeg.so.62
 /usr/lib64/libjpeg.so.62.2.0
 /usr/lib64/libturbojpeg.so.0
