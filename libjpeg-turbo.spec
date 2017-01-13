@@ -6,7 +6,7 @@
 #
 Name     : libjpeg-turbo
 Version  : 1.5.1
-Release  : 23
+Release  : 24
 URL      : http://downloads.sourceforge.net/libjpeg-turbo/libjpeg-turbo-1.5.1.tar.gz
 Source0  : http://downloads.sourceforge.net/libjpeg-turbo/libjpeg-turbo-1.5.1.tar.gz
 Source99 : http://downloads.sourceforge.net/libjpeg-turbo/libjpeg-turbo-1.5.1.tar.gz.sig
@@ -98,7 +98,7 @@ popd
 
 %build
 export LANG=C
-export SOURCE_DATE_EPOCH=1484269748
+export SOURCE_DATE_EPOCH=1484273081
 export AR=gcc-ar
 export RANLIB=gcc-ranlib
 export NM=gcc-nm
