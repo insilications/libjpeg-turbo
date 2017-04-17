@@ -6,7 +6,7 @@
 #
 Name     : libjpeg-turbo
 Version  : 1.5.1
-Release  : 29
+Release  : 30
 URL      : http://downloads.sourceforge.net/libjpeg-turbo/libjpeg-turbo-1.5.1.tar.gz
 Source0  : http://downloads.sourceforge.net/libjpeg-turbo/libjpeg-turbo-1.5.1.tar.gz
 Source99 : http://downloads.sourceforge.net/libjpeg-turbo/libjpeg-turbo-1.5.1.tar.gz.sig
@@ -99,7 +99,7 @@ popd
 
 %build
 export LANG=C
-export SOURCE_DATE_EPOCH=1484339785
+export SOURCE_DATE_EPOCH=1492456082
 export AR=gcc-ar
 export RANLIB=gcc-ranlib
 export NM=gcc-nm
@@ -139,6 +139,7 @@ export no_proxy=localhost
 make VERBOSE=1 V=1 %{?_smp_mflags} check
 
 %install
+export SOURCE_DATE_EPOCH=1492456082
 rm -rf %{buildroot}
 pushd ../build32/
 %make_install32
@@ -166,11 +167,11 @@ export FCFLAGS_USE="$FCFLAGS -fprofile-use -fprofile-dir=pgo -fprofile-correctio
 export FFLAGS_USE="$FFLAGS -fprofile-use -fprofile-dir=pgo -fprofile-correction "
 export CXXFLAGS_USE="$CXXFLAGS -fprofile-use -fprofile-dir=pgo -fprofile-correction "
 make clean
-%configure --disable-static --libdir=/usr/lib64/avx2
+%configure --disable-static --libdir=/usr/lib64/haswell
 make V=1  %{?_smp_mflags}
 make DESTDIR=%{buildroot} install-libLTLIBRARIES
-rm -f %{buildroot}/usr/lib64/avx2/*.la
-rm -f %{buildroot}/usr/lib64/avx2/*.lo
+rm -f %{buildroot}/usr/lib64/haswell/*.la
+rm -f %{buildroot}/usr/lib64/haswell/*.lo
 
 %files
 %defattr(-,root,root,-)
@@ -187,8 +188,8 @@ rm -f %{buildroot}/usr/lib64/avx2/*.lo
 %files dev
 %defattr(-,root,root,-)
 /usr/include/*.h
-/usr/lib64/avx2/libjpeg.so
-/usr/lib64/avx2/libturbojpeg.so
+/usr/lib64/haswell/libjpeg.so
+/usr/lib64/haswell/libturbojpeg.so
 /usr/lib64/libjpeg.so
 /usr/lib64/libturbojpeg.so
 /usr/lib64/pkgconfig/libjpeg.pc
@@ -210,10 +211,10 @@ rm -f %{buildroot}/usr/lib64/avx2/*.lo
 
 %files lib
 %defattr(-,root,root,-)
-/usr/lib64/avx2/libjpeg.so.62
-/usr/lib64/avx2/libjpeg.so.62.2.0
-/usr/lib64/avx2/libturbojpeg.so.0
-/usr/lib64/avx2/libturbojpeg.so.0.1.0
+/usr/lib64/haswell/libjpeg.so.62
+/usr/lib64/haswell/libjpeg.so.62.2.0
+/usr/lib64/haswell/libturbojpeg.so.0
+/usr/lib64/haswell/libturbojpeg.so.0.1.0
 /usr/lib64/libjpeg.so.62
 /usr/lib64/libjpeg.so.62.2.0
 /usr/lib64/libturbojpeg.so.0
