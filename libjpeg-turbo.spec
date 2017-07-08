@@ -5,11 +5,11 @@
 # Source0 file verified with key 0x85C7044E033FDE16 (information@libjpeg-turbo.org)
 #
 Name     : libjpeg-turbo
-Version  : 1.5.1
+Version  : 1.5.2
 Release  : 32
-URL      : http://downloads.sourceforge.net/libjpeg-turbo/libjpeg-turbo-1.5.1.tar.gz
-Source0  : http://downloads.sourceforge.net/libjpeg-turbo/libjpeg-turbo-1.5.1.tar.gz
-Source99 : http://downloads.sourceforge.net/libjpeg-turbo/libjpeg-turbo-1.5.1.tar.gz.sig
+URL      : http://downloads.sourceforge.net/libjpeg-turbo/libjpeg-turbo-1.5.2.tar.gz
+Source0  : http://downloads.sourceforge.net/libjpeg-turbo/libjpeg-turbo-1.5.2.tar.gz
+Source99 : http://downloads.sourceforge.net/libjpeg-turbo/libjpeg-turbo-1.5.2.tar.gz.sig
 Summary  : A SIMD-accelerated JPEG codec that provides the TurboJPEG API
 Group    : Development/Tools
 License  : BSD-3-Clause IJG MIT
@@ -92,9 +92,9 @@ lib32 components for the libjpeg-turbo package.
 
 
 %prep
-%setup -q -n libjpeg-turbo-1.5.1
+%setup -q -n libjpeg-turbo-1.5.2
 pushd ..
-cp -a libjpeg-turbo-1.5.1 build32
+cp -a libjpeg-turbo-1.5.2 build32
 popd
 
 %build
