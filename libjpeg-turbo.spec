@@ -6,13 +6,13 @@
 #
 Name     : libjpeg-turbo
 Version  : 1.5.2
-Release  : 32
+Release  : 33
 URL      : http://downloads.sourceforge.net/libjpeg-turbo/libjpeg-turbo-1.5.2.tar.gz
 Source0  : http://downloads.sourceforge.net/libjpeg-turbo/libjpeg-turbo-1.5.2.tar.gz
 Source99 : http://downloads.sourceforge.net/libjpeg-turbo/libjpeg-turbo-1.5.2.tar.gz.sig
 Summary  : A SIMD-accelerated JPEG codec that provides the TurboJPEG API
 Group    : Development/Tools
-License  : BSD-3-Clause IJG MIT
+License  : BSD-3-Clause IJG
 Requires: libjpeg-turbo-bin
 Requires: libjpeg-turbo-lib
 Requires: libjpeg-turbo-doc
@@ -24,6 +24,7 @@ BuildRequires : glibc-dev32
 BuildRequires : glibc-libc32
 BuildRequires : nasm
 BuildRequires : yasm
+Patch1: cve-2017-15232.patch
 
 %description
 TurboJPEG Java Wrapper
@@ -93,24 +94,31 @@ lib32 components for the libjpeg-turbo package.
 
 %prep
 %setup -q -n libjpeg-turbo-1.5.2
+%patch1 -p1
 pushd ..
 cp -a libjpeg-turbo-1.5.2 build32
 popd
+pushd ..
+cp -a libjpeg-turbo-1.5.2 buildavx2
+popd
 
 %build
+export http_proxy=http://127.0.0.1:9/
+export https_proxy=http://127.0.0.1:9/
+export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1492456082
+export SOURCE_DATE_EPOCH=1509232243
 export AR=gcc-ar
 export RANLIB=gcc-ranlib
 export NM=gcc-nm
-export CFLAGS="$CFLAGS -O3 -falign-functions=32 -ffat-lto-objects -flto -fno-semantic-interposition "
-export FCFLAGS="$CFLAGS -O3 -falign-functions=32 -ffat-lto-objects -flto -fno-semantic-interposition "
-export FFLAGS="$CFLAGS -O3 -falign-functions=32 -ffat-lto-objects -flto -fno-semantic-interposition "
-export CXXFLAGS="$CXXFLAGS -O3 -falign-functions=32 -ffat-lto-objects -flto -fno-semantic-interposition "
-export CFLAGS_GENERATE="$CFLAGS -fprofile-generate -fprofile-dir=pgo "
-export FCFLAGS_GENERATE="$FCFLAGS -fprofile-generate -fprofile-dir=pgo "
-export FFLAGS_GENERATE="$FFLAGS -fprofile-generate -fprofile-dir=pgo "
-export CXXFLAGS_GENERATE="$CXXFLAGS -fprofile-generate -fprofile-dir=pgo "
+export CFLAGS="$CFLAGS -O3 -falign-functions=32 -ffat-lto-objects -flto=4 -fno-math-errno -fno-semantic-interposition -fno-trapping-math -fstack-protector-strong "
+export FCFLAGS="$CFLAGS -O3 -falign-functions=32 -ffat-lto-objects -flto=4 -fno-math-errno -fno-semantic-interposition -fno-trapping-math -fstack-protector-strong "
+export FFLAGS="$CFLAGS -O3 -falign-functions=32 -ffat-lto-objects -flto=4 -fno-math-errno -fno-semantic-interposition -fno-trapping-math -fstack-protector-strong "
+export CXXFLAGS="$CXXFLAGS -O3 -falign-functions=32 -ffat-lto-objects -flto=4 -fno-math-errno -fno-semantic-interposition -fno-trapping-math -fstack-protector-strong "
+export CFLAGS_GENERATE="$CFLAGS -fprofile-generate -fprofile-dir=pgo -fprofile-update=atomic "
+export FCFLAGS_GENERATE="$FCFLAGS -fprofile-generate -fprofile-dir=pgo -fprofile-update=atomic "
+export FFLAGS_GENERATE="$FFLAGS -fprofile-generate -fprofile-dir=pgo -fprofile-update=atomic "
+export CXXFLAGS_GENERATE="$CXXFLAGS -fprofile-generate -fprofile-dir=pgo -fprofile-update=atomic "
 export CFLAGS_USE="$CFLAGS -fprofile-use -fprofile-dir=pgo -fprofile-correction "
 export FCFLAGS_USE="$FCFLAGS -fprofile-use -fprofile-dir=pgo -fprofile-correction "
 export FFLAGS_USE="$FFLAGS -fprofile-use -fprofile-dir=pgo -fprofile-correction "
@@ -131,15 +139,22 @@ export LDFLAGS="$LDFLAGS -m32"
 %configure --disable-static    --libdir=/usr/lib32 --build=i686-generic-linux-gnu --host=i686-generic-linux-gnu --target=i686-clr-linux-gnu
 make V=1  %{?_smp_mflags}
 popd
+pushd ../buildavx2/
+export CFLAGS="$CFLAGS -m64 -march=haswell"
+export CXXFLAGS="$CXXFLAGS -m64 -march=haswell"
+export LDFLAGS="$LDFLAGS -m64 -march=haswell"
+%configure --disable-static    --libdir=/usr/lib64/haswell --bindir=/usr/bin/haswell
+make V=1  %{?_smp_mflags}
+popd
 %check
 export LANG=C
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
-export no_proxy=localhost
+export no_proxy=localhost,127.0.0.1,0.0.0.0
 make VERBOSE=1 V=1 %{?_smp_mflags} check
 
 %install
-export SOURCE_DATE_EPOCH=1492456082
+export SOURCE_DATE_EPOCH=1509232243
 rm -rf %{buildroot}
 pushd ../build32/
 %make_install32
@@ -150,36 +165,26 @@ for i in *.pc ; do ln -s $i 32$i ; done
 popd
 fi
 popd
+pushd ../buildavx2/
 %make_install
-export AR=gcc-ar
-export RANLIB=gcc-ranlib
-export NM=gcc-nm
-export CFLAGS="$CFLAGS -O3 -falign-functions=32 -ffat-lto-objects -flto -fno-semantic-interposition -march=haswell "
-export FCFLAGS="$CFLAGS -O3 -falign-functions=32 -ffat-lto-objects -flto -fno-semantic-interposition -march=haswell "
-export FFLAGS="$CFLAGS -O3 -falign-functions=32 -ffat-lto-objects -flto -fno-semantic-interposition -march=haswell "
-export CXXFLAGS="$CXXFLAGS -O3 -falign-functions=32 -ffat-lto-objects -flto -fno-semantic-interposition -march=haswell "
-export CFLAGS_GENERATE="$CFLAGS -fprofile-generate -fprofile-dir=pgo "
-export FCFLAGS_GENERATE="$FCFLAGS -fprofile-generate -fprofile-dir=pgo "
-export FFLAGS_GENERATE="$FFLAGS -fprofile-generate -fprofile-dir=pgo "
-export CXXFLAGS_GENERATE="$CXXFLAGS -fprofile-generate -fprofile-dir=pgo "
-export CFLAGS_USE="$CFLAGS -fprofile-use -fprofile-dir=pgo -fprofile-correction "
-export FCFLAGS_USE="$FCFLAGS -fprofile-use -fprofile-dir=pgo -fprofile-correction "
-export FFLAGS_USE="$FFLAGS -fprofile-use -fprofile-dir=pgo -fprofile-correction "
-export CXXFLAGS_USE="$CXXFLAGS -fprofile-use -fprofile-dir=pgo -fprofile-correction "
-make clean
-%configure --disable-static --libdir=/usr/lib64/haswell
-make V=1  %{?_smp_mflags}
-make DESTDIR=%{buildroot} install-libLTLIBRARIES
-rm -f %{buildroot}/usr/lib64/haswell/*.la
-rm -f %{buildroot}/usr/lib64/haswell/*.lo
+popd
+%make_install
 
 %files
 %defattr(-,root,root,-)
+/usr/lib64/haswell/pkgconfig/libjpeg.pc
+/usr/lib64/haswell/pkgconfig/libturbojpeg.pc
 
 %files bin
 %defattr(-,root,root,-)
 /usr/bin/cjpeg
 /usr/bin/djpeg
+/usr/bin/haswell/cjpeg
+/usr/bin/haswell/djpeg
+/usr/bin/haswell/jpegtran
+/usr/bin/haswell/rdjpgcom
+/usr/bin/haswell/tjbench
+/usr/bin/haswell/wrjpgcom
 /usr/bin/jpegtran
 /usr/bin/rdjpgcom
 /usr/bin/tjbench
