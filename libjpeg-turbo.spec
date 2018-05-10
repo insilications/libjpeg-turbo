@@ -4,7 +4,7 @@
 #
 Name     : libjpeg-turbo
 Version  : 1.5.3
-Release  : 38
+Release  : 39
 URL      : https://github.com/libjpeg-turbo/libjpeg-turbo/archive/1.5.3.tar.gz
 Source0  : https://github.com/libjpeg-turbo/libjpeg-turbo/archive/1.5.3.tar.gz
 Summary  : A SIMD-accelerated JPEG codec that provides the TurboJPEG API
