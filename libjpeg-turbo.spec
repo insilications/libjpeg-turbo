@@ -4,7 +4,7 @@
 #
 Name     : libjpeg-turbo
 Version  : 2.0.0
-Release  : 41
+Release  : 42
 URL      : https://github.com/libjpeg-turbo/libjpeg-turbo/archive/2.0.0.tar.gz
 Source0  : https://github.com/libjpeg-turbo/libjpeg-turbo/archive/2.0.0.tar.gz
 Summary  : A SIMD-accelerated JPEG codec that provides the TurboJPEG API
@@ -59,6 +59,7 @@ dev components for the libjpeg-turbo package.
 %package dev32
 Summary: dev32 components for the libjpeg-turbo package.
 Group: Default
+Requires: libjpeg-turbo-lib32
 Requires: libjpeg-turbo-bin
 Requires: libjpeg-turbo-dev
 
@@ -82,6 +83,15 @@ Requires: libjpeg-turbo-license
 
 %description lib
 lib components for the libjpeg-turbo package.
+
+
+%package lib32
+Summary: lib32 components for the libjpeg-turbo package.
+Group: Default
+Requires: libjpeg-turbo-license
+
+%description lib32
+lib32 components for the libjpeg-turbo package.
 
 
 %package license
@@ -114,7 +124,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1532746714
+export SOURCE_DATE_EPOCH=1532747066
 mkdir clr-build
 pushd clr-build
 export AR=gcc-ar
@@ -187,7 +197,7 @@ export no_proxy=localhost,127.0.0.1,0.0.0.0
 pushd clr-build ; make test ; popd
 
 %install
-export SOURCE_DATE_EPOCH=1532746714
+export SOURCE_DATE_EPOCH=1532747066
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/doc/libjpeg-turbo
 cp release/License.rtf %{buildroot}/usr/share/doc/libjpeg-turbo/release_License.rtf
@@ -206,6 +216,9 @@ popd
 pushd clr-build
 %make_install
 popd
+## make_install_append content
+mv %{buildroot}/usr/lib %{buildroot}/usr/lib32
+## make_install_append end
 
 %files
 %defattr(-,root,root,-)
@@ -228,8 +241,6 @@ popd
 %files dev
 %defattr(-,root,root,-)
 /usr/include/*.h
-/usr/lib/libjpeg.so
-/usr/lib/libturbojpeg.so
 /usr/lib64/haswell/libjpeg.so
 /usr/lib64/haswell/libturbojpeg.so
 /usr/lib64/libjpeg.so
@@ -250,10 +261,6 @@ popd
 
 %files lib
 %defattr(-,root,root,-)
-/usr/lib/libjpeg.so.62
-/usr/lib/libjpeg.so.62.3.0
-/usr/lib/libturbojpeg.so.0
-/usr/lib/libturbojpeg.so.0.2.0
 /usr/lib64/haswell/libjpeg.so.62
 /usr/lib64/haswell/libjpeg.so.62.3.0
 /usr/lib64/haswell/libturbojpeg.so.0
@@ -262,6 +269,15 @@ popd
 /usr/lib64/libjpeg.so.62.3.0
 /usr/lib64/libturbojpeg.so.0
 /usr/lib64/libturbojpeg.so.0.2.0
+
+%files lib32
+%defattr(-,root,root,-)
+/usr/lib32/lib/libjpeg.so
+/usr/lib32/lib/libjpeg.so.62
+/usr/lib32/lib/libjpeg.so.62.3.0
+/usr/lib32/lib/libturbojpeg.so
+/usr/lib32/lib/libturbojpeg.so.0
+/usr/lib32/lib/libturbojpeg.so.0.2.0
 
 %files license
 %defattr(-,root,root,-)
