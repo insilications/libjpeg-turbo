@@ -4,7 +4,7 @@
 #
 Name     : libjpeg-turbo
 Version  : 2.0.0
-Release  : 42
+Release  : 43
 URL      : https://github.com/libjpeg-turbo/libjpeg-turbo/archive/2.0.0.tar.gz
 Source0  : https://github.com/libjpeg-turbo/libjpeg-turbo/archive/2.0.0.tar.gz
 Summary  : A SIMD-accelerated JPEG codec that provides the TurboJPEG API
@@ -124,7 +124,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1532747066
+export SOURCE_DATE_EPOCH=1532747516
 mkdir clr-build
 pushd clr-build
 export AR=gcc-ar
@@ -197,7 +197,7 @@ export no_proxy=localhost,127.0.0.1,0.0.0.0
 pushd clr-build ; make test ; popd
 
 %install
-export SOURCE_DATE_EPOCH=1532747066
+export SOURCE_DATE_EPOCH=1532747516
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/doc/libjpeg-turbo
 cp release/License.rtf %{buildroot}/usr/share/doc/libjpeg-turbo/release_License.rtf
@@ -217,7 +217,7 @@ pushd clr-build
 %make_install
 popd
 ## make_install_append content
-mv %{buildroot}/usr/lib %{buildroot}/usr/lib32
+mv %{buildroot}/usr/lib/*so* %{buildroot}/usr/lib32
 ## make_install_append end
 
 %files
@@ -250,6 +250,8 @@ mv %{buildroot}/usr/lib %{buildroot}/usr/lib32
 
 %files dev32
 %defattr(-,root,root,-)
+/usr/lib32/libjpeg.so
+/usr/lib32/libturbojpeg.so
 /usr/lib32/pkgconfig/32libjpeg.pc
 /usr/lib32/pkgconfig/32libturbojpeg.pc
 /usr/lib32/pkgconfig/libjpeg.pc
@@ -272,12 +274,10 @@ mv %{buildroot}/usr/lib %{buildroot}/usr/lib32
 
 %files lib32
 %defattr(-,root,root,-)
-/usr/lib32/lib/libjpeg.so
-/usr/lib32/lib/libjpeg.so.62
-/usr/lib32/lib/libjpeg.so.62.3.0
-/usr/lib32/lib/libturbojpeg.so
-/usr/lib32/lib/libturbojpeg.so.0
-/usr/lib32/lib/libturbojpeg.so.0.2.0
+/usr/lib32/libjpeg.so.62
+/usr/lib32/libjpeg.so.62.3.0
+/usr/lib32/libturbojpeg.so.0
+/usr/lib32/libturbojpeg.so.0.2.0
 
 %files license
 %defattr(-,root,root,-)
