@@ -1,0 +1,1 @@
+[ -d %{buildroot}/usr/lib/ ] && mv %{buildroot}/usr/lib/*so* %{buildroot}/usr/lib32
