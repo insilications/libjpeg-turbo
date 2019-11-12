@@ -4,7 +4,7 @@
 #
 Name     : libjpeg-turbo
 Version  : 2.0.3
-Release  : 51
+Release  : 52
 URL      : https://github.com/libjpeg-turbo/libjpeg-turbo/archive/2.0.3.tar.gz
 Source0  : https://github.com/libjpeg-turbo/libjpeg-turbo/archive/2.0.3.tar.gz
 Summary  : A SIMD-accelerated JPEG codec that provides the TurboJPEG API
@@ -23,6 +23,7 @@ BuildRequires : glibc-libc32
 BuildRequires : nasm
 BuildRequires : util-linux
 BuildRequires : yasm
+Patch1: CVE-2019-2201.patch
 
 %description
 TurboJPEG Java Wrapper
@@ -113,13 +114,15 @@ man components for the libjpeg-turbo package.
 
 %prep
 %setup -q -n libjpeg-turbo-2.0.3
+cd %{_builddir}/libjpeg-turbo-2.0.3
+%patch1 -p1
 
 %build
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1571687346
+export SOURCE_DATE_EPOCH=1573588093
 mkdir -p clr-build
 pushd clr-build
 export GCC_IGNORE_WERROR=1
@@ -206,7 +209,7 @@ cd ../clr-build-avx2;
 make test || :
 
 %install
-export SOURCE_DATE_EPOCH=1571687346
+export SOURCE_DATE_EPOCH=1573588093
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/libjpeg-turbo
 cp %{_builddir}/libjpeg-turbo-2.0.3/LICENSE.md %{buildroot}/usr/share/package-licenses/libjpeg-turbo/a5f4d6f407de11b9ce0fef27e335ddcaeded9f2d
