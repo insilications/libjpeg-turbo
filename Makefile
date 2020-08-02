@@ -1,5 +1,5 @@
 PKG_NAME := libjpeg-turbo
-URL = https://sourceforge.net/projects/libjpeg-turbo/files/2.0.5/libjpeg-turbo-2.0.5.tar.gz
+URL = https://github.com/libjpeg-turbo/libjpeg-turbo.git
 ARCHIVES = 
 
 include ../common/Makefile.common

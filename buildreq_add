@@ -9,3 +9,8 @@ glibc-dev32
 glibc-libc32
 nasm
 yasm
+zlib-dev32
+zlib-staticdev32
+zlib-staticdev
+openjdk13
+openjdk13-dev
