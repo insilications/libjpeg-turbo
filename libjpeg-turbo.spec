@@ -4,10 +4,10 @@
 #
 %define keepstatic 1
 Name     : libjpeg-turbo
-Version  : 2.0.5
-Release  : 57
-URL      : file:///insilications/build/clearlinux/packages/libjpeg-turbo/libjpeg-turbo-2.0.5.tar.gz
-Source0  : file:///insilications/build/clearlinux/packages/libjpeg-turbo/libjpeg-turbo-2.0.5.tar.gz
+Version  : 9
+Release  : 58
+URL      : file:///insilications/build/clearlinux/packages/libjpeg-turbo/libjpeg-turbo-9.tar.gz
+Source0  : file:///insilications/build/clearlinux/packages/libjpeg-turbo/libjpeg-turbo-9.tar.gz
 Summary  : A SIMD-accelerated JPEG codec that provides the TurboJPEG API
 Group    : Development/Tools
 License  : IJG
@@ -121,7 +121,7 @@ staticdev components for the libjpeg-turbo package.
 %package staticdev32
 Summary: staticdev32 components for the libjpeg-turbo package.
 Group: Default
-Requires: libjpeg-turbo-dev = %{version}-%{release}
+Requires: libjpeg-turbo-dev32 = %{version}-%{release}
 
 %description staticdev32
 staticdev32 components for the libjpeg-turbo package.
@@ -135,8 +135,9 @@ cd %{_builddir}/libjpeg-turbo
 unset http_proxy
 unset https_proxy
 unset no_proxy
+export SSL_CERT_FILE=/var/cache/ca-certs/anchors/ca-certificates.crt
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1598782090
+export SOURCE_DATE_EPOCH=1611835672
 mkdir -p clr-build
 pushd clr-build
 export GCC_IGNORE_WERROR=1
@@ -160,14 +161,14 @@ export FCFLAGS_USE="-g -O3 -march=native -mtune=native -fgraphite-identity -Wall
 export FFLAGS_USE="-g -O3 -march=native -mtune=native -fgraphite-identity -Wall -Wl,--as-needed -Wl,--build-id=sha1 -Wl,--enable-new-dtags -Wl,--hash-style=gnu -Wl,-O2 -Wl,-z,now -Wl,-z,relro -falign-functions=32 -flimit-function-alignment -fasynchronous-unwind-tables -fdevirtualize-at-ltrans -floop-nest-optimize -fno-math-errno -fno-semantic-interposition -fno-stack-protector -fno-trapping-math -ftree-loop-distribute-patterns -ftree-loop-vectorize -ftree-vectorize -funroll-loops -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -feliminate-unused-debug-types -fipa-pta -flto=16 -fno-plt -mtls-dialect=gnu2 -Wl,-sort-common -Wno-error -Wp,-D_REENTRANT -pipe -ffat-lto-objects -fPIC $PGO_USE"
 export CXXFLAGS_USE="-g -O3 -march=native -mtune=native -fgraphite-identity -Wall -Wl,--as-needed -Wl,--build-id=sha1 -Wl,--enable-new-dtags -Wl,--hash-style=gnu -Wl,-O2 -Wl,-z,now -Wl,-z,relro -falign-functions=32 -flimit-function-alignment -fasynchronous-unwind-tables -fdevirtualize-at-ltrans -floop-nest-optimize -fno-math-errno -fno-semantic-interposition -fno-stack-protector -fno-trapping-math -ftree-loop-distribute-patterns -ftree-loop-vectorize -ftree-vectorize -funroll-loops -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -feliminate-unused-debug-types -fipa-pta -flto=16 -fno-plt -mtls-dialect=gnu2 -Wl,-sort-common -Wno-error -Wp,-D_REENTRANT -fvisibility-inlines-hidden -pipe -ffat-lto-objects -fPIC $PGO_USE"
 export LDFLAGS_USE="-g -O3 -march=native -mtune=native -fgraphite-identity -Wall -Wl,--as-needed -Wl,--build-id=sha1 -Wl,--enable-new-dtags -Wl,--hash-style=gnu -Wl,-O2 -Wl,-z,now -Wl,-z,relro -falign-functions=32 -flimit-function-alignment -fasynchronous-unwind-tables -fdevirtualize-at-ltrans -floop-nest-optimize -fno-math-errno -fno-semantic-interposition -fno-stack-protector -fno-trapping-math -ftree-loop-distribute-patterns -ftree-loop-vectorize -ftree-vectorize -funroll-loops -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -feliminate-unused-debug-types -fipa-pta -flto=16 -fno-plt -mtls-dialect=gnu2 -Wl,-sort-common -Wno-error -Wp,-D_REENTRANT -pipe -ffat-lto-objects -fPIC $PGO_USE"
-export AR=gcc-ar
-export RANLIB=gcc-ranlib
-export NM=gcc-nm
+export AR=/usr/bin/gcc-ar
+export RANLIB=/usr/bin/gcc-ranlib
+export NM=/usr/bin/gcc-nm
 #
 export MAKEFLAGS=%{?_smp_mflags}
 #
-%define _lto_cflags 1
-#%define _lto_cflags %{nil}
+%global _lto_cflags 1
+#global _lto_cflags %{nil}
 #
 # export PATH="/usr/lib64/ccache/bin:$PATH"
 # export CCACHE_NOHASHDIR=1
@@ -175,9 +176,6 @@ export MAKEFLAGS=%{?_smp_mflags}
 # export CCACHE_SLOPPINESS=pch_defines,locale,time_macros
 # export CCACHE_DISABLE=1
 ## altflags_pgo end
-##
-%define _lto_cflags 1
-##
 export CFLAGS="${CFLAGS_GENERATE}"
 export CXXFLAGS="${CXXFLAGS_GENERATE}"
 export FFLAGS="${FFLAGS_GENERATE}"
@@ -188,7 +186,7 @@ make  %{?_smp_mflags}  V=1 VERBOSE=1
 
 VERBOSE=1 V=1 make %{?_smp_mflags} test || :
 ./tjbench ../testimages/testimgint.jpg
-find . -type f -not -name '*.gcno' -delete -print
+find . -type f,l -not -name '*.gcno' -delete -print
 export CFLAGS="${CFLAGS_USE}"
 export CXXFLAGS="${CXXFLAGS_USE}"
 export FFLAGS="${FFLAGS_USE}"
@@ -199,9 +197,9 @@ make  %{?_smp_mflags}  V=1 VERBOSE=1
 popd
 mkdir -p clr-build32
 pushd clr-build32
-export CFLAGS="-g -O2 -fuse-linker-plugin -pipe"
-export CXXFLAGS="-g -O2 -fuse-linker-plugin -fvisibility-inlines-hidden -pipe"
-export LDFLAGS="-g -O2 -fuse-linker-plugin -pipe"
+export CFLAGS="-O2 -ffat-lto-objects -fuse-linker-plugin -pipe -fPIC -m32 -mstackrealign -march=native -mtune=native"
+export CXXFLAGS="-O2 -ffat-lto-objects -fuse-linker-plugin -fvisibility-inlines-hidden -pipe -fPIC -m32 -mstackrealign -march=native -mtune=native"
+export LDFLAGS="-O2 -ffat-lto-objects -fuse-linker-plugin -pipe -fPIC -m32 -mstackrealign -march=native -mtune=native"
 export AR=gcc-ar
 export RANLIB=gcc-ranlib
 export NM=gcc-nm
@@ -221,12 +219,13 @@ export LANG=C.UTF-8
 unset http_proxy
 unset https_proxy
 unset no_proxy
+export SSL_CERT_FILE=/var/cache/ca-certs/anchors/ca-certificates.crt
 cd clr-build; make test
 cd ../clr-build32;
 make test || :
 
 %install
-export SOURCE_DATE_EPOCH=1598782090
+export SOURCE_DATE_EPOCH=1611835672
 rm -rf %{buildroot}
 pushd clr-build32
 %make_install32
@@ -263,6 +262,10 @@ popd
 /usr/include/jmorecfg.h
 /usr/include/jpeglib.h
 /usr/include/turbojpeg.h
+/usr/lib64/cmake/libjpeg-turbo/libjpeg-turboConfig.cmake
+/usr/lib64/cmake/libjpeg-turbo/libjpeg-turboConfigVersion.cmake
+/usr/lib64/cmake/libjpeg-turbo/libjpeg-turboTargets-relwithdebinfo.cmake
+/usr/lib64/cmake/libjpeg-turbo/libjpeg-turboTargets.cmake
 /usr/lib64/libjpeg.so
 /usr/lib64/libturbojpeg.so
 /usr/lib64/pkgconfig/libjpeg.pc
@@ -270,6 +273,10 @@ popd
 
 %files dev32
 %defattr(-,root,root,-)
+/usr/lib32/cmake/libjpeg-turbo/libjpeg-turboConfig.cmake
+/usr/lib32/cmake/libjpeg-turbo/libjpeg-turboConfigVersion.cmake
+/usr/lib32/cmake/libjpeg-turbo/libjpeg-turboTargets-relwithdebinfo.cmake
+/usr/lib32/cmake/libjpeg-turbo/libjpeg-turboTargets.cmake
 /usr/lib32/libjpeg.so
 /usr/lib32/libturbojpeg.so
 /usr/lib32/pkgconfig/32libjpeg.pc
