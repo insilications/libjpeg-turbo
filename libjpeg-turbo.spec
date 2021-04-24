@@ -5,11 +5,11 @@
 # Source0 file verified with key 0x7EC2DBB6F4DBF434 (information@libjpeg-turbo.org)
 #
 Name     : libjpeg-turbo
-Version  : 2.0.6
-Release  : 55
-URL      : https://sourceforge.net/projects/libjpeg-turbo/files/2.0.6/libjpeg-turbo-2.0.6.tar.gz
-Source0  : https://sourceforge.net/projects/libjpeg-turbo/files/2.0.6/libjpeg-turbo-2.0.6.tar.gz
-Source1  : https://sourceforge.net/projects/libjpeg-turbo/files/2.0.6/libjpeg-turbo-2.0.6.tar.gz.sig
+Version  : 2.1.0
+Release  : 56
+URL      : https://sourceforge.net/projects/libjpeg-turbo/files/2.1.0/libjpeg-turbo-2.1.0.tar.gz
+Source0  : https://sourceforge.net/projects/libjpeg-turbo/files/2.1.0/libjpeg-turbo-2.1.0.tar.gz
+Source1  : https://sourceforge.net/projects/libjpeg-turbo/files/2.1.0/libjpeg-turbo-2.1.0.tar.gz.sig
 Summary  : A SIMD-accelerated JPEG codec that provides the TurboJPEG API
 Group    : Development/Tools
 License  : BSD-3-Clause IJG
@@ -114,15 +114,15 @@ man components for the libjpeg-turbo package.
 
 
 %prep
-%setup -q -n libjpeg-turbo-2.0.6
-cd %{_builddir}/libjpeg-turbo-2.0.6
+%setup -q -n libjpeg-turbo-2.1.0
+cd %{_builddir}/libjpeg-turbo-2.1.0
 
 %build
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1605633328
+export SOURCE_DATE_EPOCH=1619273271
 mkdir -p clr-build
 pushd clr-build
 export GCC_IGNORE_WERROR=1
@@ -211,11 +211,10 @@ cd ../clr-build-avx2;
 make test || :
 
 %install
-export SOURCE_DATE_EPOCH=1605633328
+export SOURCE_DATE_EPOCH=1619273271
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/libjpeg-turbo
-cp %{_builddir}/libjpeg-turbo-2.0.6/LICENSE.md %{buildroot}/usr/share/package-licenses/libjpeg-turbo/473c07302a0759fd751db4017db57fd17163169b
-cp %{_builddir}/libjpeg-turbo-2.0.6/release/License.rtf %{buildroot}/usr/share/package-licenses/libjpeg-turbo/f0b17b88210d4efef996d99421683315b8ded689
+cp %{_builddir}/libjpeg-turbo-2.1.0/release/License.rtf %{buildroot}/usr/share/package-licenses/libjpeg-turbo/f0b17b88210d4efef996d99421683315b8ded689
 pushd clr-build32
 %make_install32
 if [ -d  %{buildroot}/usr/lib32/pkgconfig ]
@@ -260,6 +259,10 @@ popd
 /usr/include/jmorecfg.h
 /usr/include/jpeglib.h
 /usr/include/turbojpeg.h
+/usr/lib64/cmake/libjpeg-turbo/libjpeg-turboConfig.cmake
+/usr/lib64/cmake/libjpeg-turbo/libjpeg-turboConfigVersion.cmake
+/usr/lib64/cmake/libjpeg-turbo/libjpeg-turboTargets-relwithdebinfo.cmake
+/usr/lib64/cmake/libjpeg-turbo/libjpeg-turboTargets.cmake
 /usr/lib64/haswell/libjpeg.so
 /usr/lib64/haswell/libturbojpeg.so
 /usr/lib64/libjpeg.so
@@ -269,6 +272,10 @@ popd
 
 %files dev32
 %defattr(-,root,root,-)
+/usr/lib32/cmake/libjpeg-turbo/libjpeg-turboConfig.cmake
+/usr/lib32/cmake/libjpeg-turbo/libjpeg-turboConfigVersion.cmake
+/usr/lib32/cmake/libjpeg-turbo/libjpeg-turboTargets-relwithdebinfo.cmake
+/usr/lib32/cmake/libjpeg-turbo/libjpeg-turboTargets.cmake
 /usr/lib32/libjpeg.so
 /usr/lib32/libturbojpeg.so
 /usr/lib32/pkgconfig/32libjpeg.pc
@@ -300,7 +307,6 @@ popd
 
 %files license
 %defattr(0644,root,root,0755)
-/usr/share/package-licenses/libjpeg-turbo/473c07302a0759fd751db4017db57fd17163169b
 /usr/share/package-licenses/libjpeg-turbo/f0b17b88210d4efef996d99421683315b8ded689
 
 %files man
